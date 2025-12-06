@@ -1,0 +1,102 @@
+.container {
+  padding: 2rem 0;
+}
+
+.hero {
+  text-align: center;
+  padding: 4rem 0;
+  background: linear-gradient(135deg, #fee2e2 0%, #fef2f2 100%);
+  border-radius: 16px;
+  margin-bottom: 4rem;
+}
+
+.heroTitle {
+  font-size: 3rem;
+  color: #111827;
+  margin-bottom: 1rem;
+}
+
+.heroDescription {
+  font-size: 1.25rem;
+  color: #6b7280;
+  max-width: 600px;
+  margin: 0 auto 2rem;
+  line-height: 1.6;
+}
+
+.heroActions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btnPrimary,
+.btnSecondary {
+  padding: 0.875rem 2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1.125rem;
+  transition: all 0.3s ease;
+}
+
+.btnPrimary {
+  background: #dc2626;
+  color: white;
+}
+
+.btnPrimary:hover {
+  background: #b91c1c;
+  transform: translateY(-2px);
+}
+
+.btnSecondary {
+  background: white;
+  color: #dc2626;
+  border: 2px solid #dc2626;
+}
+
+.btnSecondary:hover {
+  background: #dc2626;
+  color: white;
+}
+
+.popularSection {
+  margin-top: 3rem;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.sectionTitle {
+  font-size: 2rem;
+  color: #111827;
+}
+
+.viewAll {
+  color: #dc2626;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.viewAll:hover {
+  color: #b91c1c;
+}
+
+@media (max-width: 768px) {
+  .heroTitle {
+    font-size: 2rem;
+  }
+
+  .heroDescription {
+    font-size: 1rem;
+  }
+
+  .sectionTitle {
+    font-size: 1.5rem;
+  }
+}

@@ -1,0 +1,51 @@
+.rating {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.stars {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.star {
+  display: inline-flex;
+  cursor: default;
+  transition: transform 0.2s ease;
+}
+
+.star.interactive {
+  cursor: pointer;
+}
+
+.star.interactive:hover {
+  transform: scale(1.1);
+}
+
+.filled {
+  color: #fbbf24;
+}
+
+.empty {
+  color: #d1d5db;
+}
+
+/* Sizes */
+.small .star {
+  font-size: 1rem;
+}
+
+.medium .star {
+  font-size: 1.25rem;
+}
+
+.large .star {
+  font-size: 1.5rem;
+}
+
+.value {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6b7280;
+}

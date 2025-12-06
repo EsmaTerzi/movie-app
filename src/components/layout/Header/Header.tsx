@@ -1,0 +1,52 @@
+'use client';
+
+import React from 'react';
+import Link from 'next/link';
+import { useAuth } from '@/contexts/AuthContext';
+import { FaFilm, FaUser, FaSignOutAlt } from 'react-icons/fa';
+import styles from './Header.module.css';
+
+const Header: React.FC = () => {
+  const { user, logout, isAuthenticated } = useAuth();
+
+  return (
+    <header className={styles.header}>
+      <div className={styles.container}>
+        <Link href="/" className={styles.logo}>
+          <FaFilm />
+          <span>Film Keşif</span>
+        </Link>
+
+        <nav className={styles.nav}>
+          <Link href="/movies" className={styles.navLink}>
+            Filmler
+          </Link>
+
+          {isAuthenticated ? (
+            <>
+              <Link href="/profile" className={styles.navLink}>
+                <FaUser />
+                <span>{user?.username}</span>
+              </Link>
+              <button onClick={logout} className={styles.logoutBtn}>
+                <FaSignOutAlt />
+                <span>Çıkış</span>
+              </button>
+            </>
+          ) : (
+            <>
+              <Link href="/auth/login" className={styles.navLink}>
+                Giriş Yap
+              </Link>
+              <Link href="/auth/register" className={styles.btnPrimary}>
+                Kayıt Ol
+              </Link>
+            </>
+          )}
+        </nav>
+      </div>
+    </header>
+  );
+};
+
+export default Header;
