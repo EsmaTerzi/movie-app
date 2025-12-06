@@ -32,9 +32,9 @@ export interface AuthResponse {
 export interface Movie {
   id: string;
   title: string;
-  description: string;
-  releaseDate: string;
-  genre: string;
+  overview: string;
+  releaseYear: string;
+  genre: string[];
   director: string;
   duration: number; // dakika cinsinden
   posterUrl: string;
@@ -58,15 +58,17 @@ export interface UpdateMovieData extends Partial<CreateMovieData> {}
 
 // Review Types
 export interface Review {
-  id: string;
-  movieId: string;
   userId: string;
-  rating: number; // 1-5 arası
-  comment: string;
+  username: string;
+  rating: number;
+  reviewText: string;
   createdAt: string;
-  updatedAt?: string;
-  user?: User;
-  movie?: Movie;
+  updatedAt: string;
+}
+
+export interface Genre{
+  id: string;
+  name: string;
 }
 
 export interface CreateReviewData {
@@ -75,9 +77,15 @@ export interface CreateReviewData {
   comment: string;
 }
 
+export interface CreateRatingData {
+  movieId: number;
+  rating: number;
+  reviewText: string;
+}
+
 export interface UpdateReviewData {
   rating?: number;
-  comment?: string;
+  reviewText?: string;
 }
 
 // Filter & Pagination Types

@@ -30,22 +30,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         if (token && savedUser) {
           const userData = JSON.parse(savedUser);
           setUser(userData);
-          
-          // Token'ı doğrula (opsiyonel)
-          try {
-            const currentUser = await authService.getCurrentUser();
-            setUser(currentUser);
-            Cookies.set('user', JSON.stringify(currentUser), { 
-              expires: 7,
-              path: '/',
-              sameSite: 'lax'
-            });
-          } catch (error) {
-            // Token geçersiz, temizle
-            Cookies.remove('token', { path: '/' });
-            Cookies.remove('user', { path: '/' });
-            setUser(null);
-          }
         }
       } catch (error) {
         console.error('Auth initialization error:', error);

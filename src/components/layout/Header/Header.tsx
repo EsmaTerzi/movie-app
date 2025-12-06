@@ -24,6 +24,11 @@ const Header: React.FC = () => {
 
           {isAuthenticated ? (
             <>
+              {user?.role === 'ADMIN' && (
+                <Link href="/dashboard" className={styles.navLink}>
+                  Admin Paneli
+                </Link>
+              )}
               <Link href="/profile" className={styles.navLink}>
                 <FaUser />
                 <span>{user?.username}</span>
@@ -38,7 +43,7 @@ const Header: React.FC = () => {
               <Link href="/auth/login" className={styles.navLink}>
                 Giriş Yap
               </Link>
-              <Link href="/auth/register" className={styles.btnPrimary}>
+              <Link href={`${process.env.NEXT_PUBLIC_BACKEND_API_URL}/register`} className={styles.btnPrimary}>
                 Kayıt Ol
               </Link>
             </>

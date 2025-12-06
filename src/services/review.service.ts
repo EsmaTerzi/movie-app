@@ -1,28 +1,16 @@
 import axiosInstance from '@/utils/axios';
-import { Review, CreateReviewData, UpdateReviewData, PaginationParams, PaginatedResponse } from '@/types';
+import { Review, CreateReviewData, UpdateReviewData, CreateRatingData } from '@/types';
 
 export const reviewService = {
   // Film için tüm yorumları getir
-  getMovieReviews: async (
-    movieId: string,
-    pagination?: PaginationParams
-  ): Promise<PaginatedResponse<Review>> => {
-    const response = await axiosInstance.get<PaginatedResponse<Review>>(
-      `/movies/${movieId}/reviews`,
-      { params: pagination }
-    );
+  getMovieReviews: async (movieId: string): Promise<Review[]> => {
+    const response = await axiosInstance.get<Review[]>(`/ratings/public/movie/${movieId}`);
     return response.data;
   },
 
   // Kullanıcının tüm yorumlarını getir
-  getUserReviews: async (
-    userId: string,
-    pagination?: PaginationParams
-  ): Promise<PaginatedResponse<Review>> => {
-    const response = await axiosInstance.get<PaginatedResponse<Review>>(
-      `/users/${userId}/reviews`,
-      { params: pagination }
-    );
+  getUserReviews: async (userId: string): Promise<Review[]> => {
+    const response = await axiosInstance.get<Review[]>(`/users/${userId}/reviews`);
     return response.data;
   },
 
@@ -32,15 +20,9 @@ export const reviewService = {
     return response.data;
   },
 
-  // Yeni yorum oluştur
-  createReview: async (data: CreateReviewData): Promise<Review> => {
-    const response = await axiosInstance.post<Review>('/reviews', data);
-    return response.data;
-  },
-
-  // Yorumu güncelle
-  updateReview: async (id: string, data: UpdateReviewData): Promise<Review> => {
-    const response = await axiosInstance.put<Review>(`/reviews/${id}`, data);
+  // Yorum oluştur veya güncelle (yeni API)
+  createOrUpdateRating: async (data: CreateRatingData): Promise<Review> => {
+    const response = await axiosInstance.post<Review>('/ratings', data);
     return response.data;
   },
 

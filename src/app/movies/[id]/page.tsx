@@ -2,10 +2,12 @@
 
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
+import Link from 'next/link';
 import Image from 'next/image';
 import { movieService } from '@/services/movie.service';
 import { reviewService } from '@/services/review.service';
 import { useAuth } from '@/contexts/AuthContext';
+import { useNotification } from '@/contexts/NotificationContext';
 import { Movie, Review } from '@/types';
 import Rating from '@/components/common/Rating/Rating';
 import Button from '@/components/common/Button/Button';
@@ -15,6 +17,7 @@ import styles from './page.module.css';
 export default function MovieDetailPage() {
   const params = useParams();
   const { user, isAuthenticated } = useAuth();
+  const { warning, success } = useNotification();
   const [movie, setMovie] = useState<Movie | null>(null);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
@@ -36,14 +39,14 @@ export default function MovieDetailPage() {
       setMovie(movieData);
 
       const reviewsData = await reviewService.getMovieReviews(params.id as string);
-      setReviews(reviewsData.data);
+      setReviews(reviewsData);
 
       if (isAuthenticated) {
         const existingReview = await reviewService.checkUserReview(params.id as string);
         if (existingReview) {
           setUserReview(existingReview);
           setRating(existingReview.rating);
-          setComment(existingReview.comment);
+          setComment(existingReview.reviewText);
         }
       }
     } catch (error) {
@@ -57,30 +60,35 @@ export default function MovieDetailPage() {
     e.preventDefault();
 
     if (!isAuthenticated) {
-      alert('Yorum yapmak için giriş yapmalısınız');
+      warning('Değerlendirme yapmak için giriş yapmalısınız');
       return;
     }
 
     if (rating === 0) {
-      alert('Lütfen bir puan seçin');
+      warning('Lütfen bir puan seçin');
       return;
     }
 
     setSubmitting(true);
     try {
-      if (userReview) {
-        await reviewService.updateReview(userReview.id, { rating, comment });
-      } else {
-        await reviewService.createReview({
-          movieId: params.id as string,
-          rating,
-          comment,
-        });
-      }
+      await reviewService.createOrUpdateRating({
+        movieId: parseInt(params.id as string),
+        rating,
+        reviewText: comment,
+      });
+      
+      success(userReview ? 'Değerlendirmeniz güncellendi!' : 'Değerlendirmeniz kaydedildi!');
+      
+      // İnputları temizle
+      setRating(0);
+      setComment('');
+      setUserReview(null);
+      
+      // Verileri yeniden yükle
       fetchMovieData();
     } catch (error) {
       console.error('Yorum gönderilirken hata:', error);
-      alert('Yorum gönderilemedi');
+      warning('Yorum gönderilemedi. Lütfen tekrar deneyin.');
     } finally {
       setSubmitting(false);
     }
@@ -110,7 +118,7 @@ export default function MovieDetailPage() {
           <div className={styles.meta}>
             <span>{movie.genre}</span>
             <span>•</span>
-            <span>{new Date(movie.releaseDate).getFullYear()}</span>
+            <span>{movie.releaseYear}</span>
             <span>•</span>
             <span>{movie.duration} dk</span>
           </div>
@@ -121,12 +129,24 @@ export default function MovieDetailPage() {
             </span>
           </div>
           <p className={styles.director}>Yönetmen: {movie.director}</p>
-          <p className={styles.description}>{movie.description}</p>
+          <p className={styles.description}>{movie.overview}</p>
         </div>
       </div>
 
       <div className={styles.reviewsSection}>
         <h2 className={styles.sectionTitle}>Değerlendirmeler</h2>
+
+        {!isAuthenticated && (
+          <div className={styles.loginPrompt}>
+            <p>
+              Değerlendirme yapmak için lütfen{' '}
+              <Link href="/auth/login" className={styles.loginLink}>
+                giriş yapın
+              </Link>
+              .
+            </p>
+          </div>
+        )}
 
         {isAuthenticated && (
           <form onSubmit={handleSubmitReview} className={styles.reviewForm}>
@@ -155,13 +175,13 @@ export default function MovieDetailPage() {
           {reviews.length === 0 ? (
             <p className={styles.noReviews}>Henüz değerlendirme yapılmamış.</p>
           ) : (
-            reviews.map((review) => (
-              <div key={review.id} className={styles.reviewCard}>
+            reviews.map((review, key) => (
+              <div key={key} className={styles.reviewCard}>
                 <div className={styles.reviewHeader}>
-                  <strong>{review.user?.username || 'Anonim'}</strong>
+                  <strong>{review.username || 'Anonim'}</strong>
                   <Rating value={review.rating} readonly size="small" />
                 </div>
-                <p className={styles.reviewComment}>{review.comment}</p>
+                <p className={styles.reviewComment}>{review.reviewText}</p>
                 <span className={styles.reviewDate}>
                   {new Date(review.createdAt).toLocaleDateString('tr-TR')}
                 </span>

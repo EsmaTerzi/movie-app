@@ -106,7 +106,7 @@ export default function LoginPage() {
 
         <p className={styles.footer}>
           Hesabınız yok mu?{' '}
-          <Link href="/auth/register" className={styles.link}>
+          <Link href={`${process.env.NEXT_PUBLIC_BACKEND_API_URL}/register`} className={styles.link}>
             Kayıt Ol
           </Link>
         </p>

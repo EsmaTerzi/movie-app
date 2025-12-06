@@ -1,18 +1,19 @@
-'use client';
+"use client";
 
-import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import MovieList from '@/components/movies/MovieList/MovieList';
-import { movieService } from '@/services/movie.service';
-import { Movie } from '@/types';
-import styles from './page.module.css';
+import React, { useEffect, useState } from "react";
+import MovieList from "@/components/movies/MovieList/MovieList";
+import { movieService } from "@/services/movie.service";
+import { Genre, Movie } from "@/types";
+import styles from "./page.module.css";
 
 export default function MoviesPage() {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedGenre, setSelectedGenre] = useState('');
-  const [genres, setGenres] = useState<string[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedGenre, setSelectedGenre] = useState("");
+  const [selectedYear, setSelectedYear] = useState("");
+  const [selectedRating, setSelectedRating] = useState("");
+  const [genres, setGenres] = useState<Genre[]>([]);
 
   useEffect(() => {
     fetchGenres();
@@ -24,21 +25,22 @@ export default function MoviesPage() {
       const genreList = await movieService.getGenres();
       setGenres(genreList);
     } catch (error) {
-      console.error('Türler yüklenirken hata:', error);
+      console.error("Türler yüklenirken hata:", error);
     }
   };
 
   const fetchMovies = async () => {
     setLoading(true);
     try {
-      const filters = {
-        search: searchQuery || undefined,
-        genre: selectedGenre || undefined,
-      };
-      const response = await movieService.getAllMovies(filters, { page: 1, limit: 20 });
-      setMovies(response.data);
+      const response = await movieService.searchMoviesAdvanced(
+        searchQuery || undefined,
+        selectedYear ? parseInt(selectedYear) : undefined,
+        selectedGenre ? parseInt(selectedGenre) : undefined,
+        selectedRating ? parseFloat(selectedRating) : undefined
+      );
+      setMovies(response);
     } catch (error) {
-      console.error('Filmler yüklenirken hata:', error);
+      console.error("Filmler yüklenirken hata:", error);
     } finally {
       setLoading(false);
     }
@@ -67,21 +69,69 @@ export default function MoviesPage() {
           </button>
         </form>
 
-        <select
-          value={selectedGenre}
-          onChange={(e) => {
-            setSelectedGenre(e.target.value);
-            fetchMovies();
-          }}
-          className={styles.genreSelect}
-        >
-          <option value="">Tüm Türler</option>
-          {genres.map((genre) => (
-            <option key={genre} value={genre}>
-              {genre}
-            </option>
-          ))}
-        </select>
+        <div className={styles.filterSelects}>
+          <div className={styles.selectWrapper}>
+            <label className={styles.selectLabel}>Tür</label>
+            <select
+              value={selectedGenre}
+              onChange={(e) => {
+                setSelectedGenre(e.target.value);
+              }}
+              className={styles.select}
+            >
+              <option value="">Tüm Türler</option>
+              {genres.map((genre) => (
+                <option key={genre.id} value={genre.id}>
+                  {genre.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className={styles.selectWrapper}>
+            <label className={styles.selectLabel}>Yıl</label>
+            <input
+              type="number"
+              placeholder="Örn: 2024"
+              value={selectedYear}
+              onChange={(e) => setSelectedYear(e.target.value)}
+              className={styles.input}
+              min="1900"
+              max={new Date().getFullYear()}
+            />
+          </div>
+
+          <div className={styles.selectWrapper}>
+            <label className={styles.selectLabel}>Min. Puan</label>
+            <input
+              type="number"
+              placeholder="1-5 arası"
+              value={selectedRating}
+              onChange={(e) => setSelectedRating(e.target.value)}
+              className={styles.input}
+              min="1"
+              max="5"
+              step="0.1"
+            />
+          </div>
+
+          <button onClick={fetchMovies} className={styles.applyButton}>
+            Filtrele
+          </button>
+
+          <button
+            onClick={() => {
+              setSearchQuery("");
+              setSelectedGenre("");
+              setSelectedYear("");
+              setSelectedRating("");
+              fetchMovies();
+            }}
+            className={styles.clearButton}
+          >
+            Temizle
+          </button>
+        </div>
       </div>
 
       <MovieList movies={movies} loading={loading} />

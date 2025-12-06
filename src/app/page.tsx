@@ -1,23 +1,25 @@
-'use client';
+"use client";
 
-import React, { useEffect, useState } from 'react';
-import Link from 'next/link';
-import MovieList from '@/components/movies/MovieList/MovieList';
-import { movieService } from '@/services/movie.service';
-import { Movie } from '@/types';
-import styles from './page.module.css';
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
+import MovieList from "@/components/movies/MovieList/MovieList";
+import { movieService } from "@/services/movie.service";
+import { Movie } from "@/types";
+import styles from "./page.module.css";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function HomePage() {
-  const [popularMovies, setPopularMovies] = useState<Movie[]>([]);
+  const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
+  const { isAuthenticated } = useAuth();
 
   useEffect(() => {
     const fetchPopularMovies = async () => {
       try {
-        const movies = await movieService.getPopularMovies(8);
-        setPopularMovies(movies);
+        const movies = await movieService.getAllMovies();
+        setMovies(movies);
       } catch (error) {
-        console.error('Filmler yüklenirken hata:', error);
+        console.error("Filmler yüklenirken hata:", error);
       } finally {
         setLoading(false);
       }
@@ -29,7 +31,9 @@ export default function HomePage() {
   return (
     <div className={styles.container}>
       <section className={styles.hero}>
-        <h1 className={styles.heroTitle}>Film Keşif Platformuna Hoş Geldiniz</h1>
+        <h1 className={styles.heroTitle}>
+          Film Keşif Platformuna Hoş Geldiniz
+        </h1>
         <p className={styles.heroDescription}>
           Binlerce film arasından beğendiklerinizi keşfedin, değerlendirin ve
           görüşlerinizi paylaşın.
@@ -38,9 +42,14 @@ export default function HomePage() {
           <Link href="/movies" className={styles.btnPrimary}>
             Filmleri Keşfet
           </Link>
-          <Link href="/auth/register" className={styles.btnSecondary}>
-            Üye Ol
-          </Link>
+          {!isAuthenticated && (
+            <Link
+              href={`${process.env.NEXT_PUBLIC_REGISTER_URL}/register`}
+              className={styles.btnSecondary}
+            >
+              Hemen Kayıt Ol
+            </Link>
+          )}
         </div>
       </section>
 
@@ -51,7 +60,7 @@ export default function HomePage() {
             Tümünü Gör →
           </Link>
         </div>
-        <MovieList movies={popularMovies} loading={loading} />
+        <MovieList movies={movies} loading={loading} />
       </section>
     </div>
   );

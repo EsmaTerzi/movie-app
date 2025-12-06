@@ -23,7 +23,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
       </div>
       <div className={styles.content}>
         <h3 className={styles.title}>{movie.title}</h3>
-        <p className={styles.genre}>{movie.genre}</p>
+        <p className={styles.genre}>{movie.genre?.map(g => g).join(', ')}</p>
         <div className={styles.footer}>
           <Rating value={movie.averageRating || 0} readonly size="small" showValue />
           <span className={styles.reviews}>
@@ -31,7 +31,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
           </span>
         </div>
         <p className={styles.year}>
-          {new Date(movie.releaseDate).getFullYear()}
+          {movie.releaseYear}
         </p>
       </div>
     </Link>
