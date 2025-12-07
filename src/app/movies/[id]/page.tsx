@@ -1,30 +1,31 @@
-'use client';
+"use client";
 
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
-import Link from 'next/link';
-import Image from 'next/image';
-import { movieService } from '@/services/movie.service';
-import { reviewService } from '@/services/review.service';
-import { useAuth } from '@/contexts/AuthContext';
-import { useNotification } from '@/contexts/NotificationContext';
-import { Movie, Review } from '@/types';
-import Rating from '@/components/common/Rating/Rating';
-import Button from '@/components/common/Button/Button';
-import Textarea from '@/components/common/Textarea/Textarea';
-import styles from './page.module.css';
+import React, { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import Link from "next/link";
+import Image from "next/image";
+import { movieService } from "@/services/movie.service";
+import { reviewService } from "@/services/review.service";
+import { useAuth } from "@/contexts/AuthContext";
+import { useNotification } from "@/contexts/NotificationContext";
+import { Movie, Review } from "@/types";
+import Rating from "@/components/common/Rating/Rating";
+import Button from "@/components/common/Button/Button";
+import Textarea from "@/components/common/Textarea/Textarea";
+import styles from "./page.module.css";
 
 export default function MovieDetailPage() {
   const params = useParams();
-  const { user, isAuthenticated } = useAuth();
+  const { isAuthenticated  } = useAuth();
   const { warning, success } = useNotification();
   const [movie, setMovie] = useState<Movie | null>(null);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
   const [userReview, setUserReview] = useState<Review | null>(null);
   const [rating, setRating] = useState(0);
-  const [comment, setComment] = useState('');
+  const [comment, setComment] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [moviesGenres, setMoviesGenres] = useState<string>("");
 
   useEffect(() => {
     if (params.id) {
@@ -38,19 +39,12 @@ export default function MovieDetailPage() {
       const movieData = await movieService.getMovieById(params.id as string);
       setMovie(movieData);
 
-      const reviewsData = await reviewService.getMovieReviews(params.id as string);
+      const reviewsData = await reviewService.getMovieReviews(
+        params.id as string
+      );
       setReviews(reviewsData);
-
-      if (isAuthenticated) {
-        const existingReview = await reviewService.checkUserReview(params.id as string);
-        if (existingReview) {
-          setUserReview(existingReview);
-          setRating(existingReview.rating);
-          setComment(existingReview.reviewText);
-        }
-      }
     } catch (error) {
-      console.error('Film verileri yüklenirken hata:', error);
+      console.error("Film verileri yüklenirken hata:", error);
     } finally {
       setLoading(false);
     }
@@ -60,12 +54,12 @@ export default function MovieDetailPage() {
     e.preventDefault();
 
     if (!isAuthenticated) {
-      warning('Değerlendirme yapmak için giriş yapmalısınız');
+      warning("Değerlendirme yapmak için giriş yapmalısınız");
       return;
     }
 
     if (rating === 0) {
-      warning('Lütfen bir puan seçin');
+      warning("Lütfen bir puan seçin");
       return;
     }
 
@@ -76,19 +70,23 @@ export default function MovieDetailPage() {
         rating,
         reviewText: comment,
       });
-      
-      success(userReview ? 'Değerlendirmeniz güncellendi!' : 'Değerlendirmeniz kaydedildi!');
-      
+
+      success(
+        userReview
+          ? "Değerlendirmeniz güncellendi!"
+          : "Değerlendirmeniz kaydedildi!"
+      );
+
       // İnputları temizle
       setRating(0);
-      setComment('');
+      setComment("");
       setUserReview(null);
-      
+
       // Verileri yeniden yükle
       fetchMovieData();
     } catch (error) {
-      console.error('Yorum gönderilirken hata:', error);
-      warning('Yorum gönderilemedi. Lütfen tekrar deneyin.');
+      console.error("Yorum gönderilirken hata:", error);
+      warning("Yorum gönderilemedi. Lütfen tekrar deneyin.");
     } finally {
       setSubmitting(false);
     }
@@ -107,7 +105,7 @@ export default function MovieDetailPage() {
       <div className={styles.movieHeader}>
         <div className={styles.posterContainer}>
           <Image
-            src={movie.posterUrl || '/placeholder-movie.jpg'}
+            src={movie.posterUrl || "/placeholder-movie.jpg"}
             alt={movie.title}
             fill
             className={styles.poster}
@@ -116,14 +114,19 @@ export default function MovieDetailPage() {
         <div className={styles.movieInfo}>
           <h1 className={styles.title}>{movie.title}</h1>
           <div className={styles.meta}>
-            <span>{movie.genre}</span>
+            <span>{moviesGenres}</span>
             <span>•</span>
             <span>{movie.releaseYear}</span>
             <span>•</span>
             <span>{movie.duration} dk</span>
           </div>
           <div className={styles.rating}>
-            <Rating value={movie.averageRating || 0} readonly size="large" showValue />
+            <Rating
+              value={movie.averageRating || 0}
+              readonly
+              size="large"
+              showValue
+            />
             <span className={styles.reviewCount}>
               ({movie.totalReviews || 0} değerlendirme)
             </span>
@@ -139,7 +142,7 @@ export default function MovieDetailPage() {
         {!isAuthenticated && (
           <div className={styles.loginPrompt}>
             <p>
-              Değerlendirme yapmak için lütfen{' '}
+              Değerlendirme yapmak için lütfen{" "}
               <Link href="/auth/login" className={styles.loginLink}>
                 giriş yapın
               </Link>
@@ -151,7 +154,9 @@ export default function MovieDetailPage() {
         {isAuthenticated && (
           <form onSubmit={handleSubmitReview} className={styles.reviewForm}>
             <h3 className={styles.formTitle}>
-              {userReview ? 'Değerlendirmenizi Düzenleyin' : 'Değerlendirme Yapın'}
+              {userReview
+                ? "Değerlendirmenizi Düzenleyin"
+                : "Değerlendirme Yapın"}
             </h3>
             <div className={styles.ratingInput}>
               <label>Puanınız:</label>
@@ -166,7 +171,7 @@ export default function MovieDetailPage() {
               fullWidth
             />
             <Button type="submit" loading={submitting}>
-              {userReview ? 'Güncelle' : 'Gönder'}
+              {userReview ? "Güncelle" : "Gönder"}
             </Button>
           </form>
         )}
@@ -178,12 +183,12 @@ export default function MovieDetailPage() {
             reviews.map((review, key) => (
               <div key={key} className={styles.reviewCard}>
                 <div className={styles.reviewHeader}>
-                  <strong>{review.username || 'Anonim'}</strong>
+                  <strong>{review.username || "Anonim"}</strong>
                   <Rating value={review.rating} readonly size="small" />
                 </div>
                 <p className={styles.reviewComment}>{review.reviewText}</p>
                 <span className={styles.reviewDate}>
-                  {new Date(review.createdAt).toLocaleDateString('tr-TR')}
+                  {new Date(review.createdAt).toLocaleDateString("tr-TR")}
                 </span>
               </div>
             ))

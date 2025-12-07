@@ -14,12 +14,6 @@ export const authService = {
     return response.data;
   },
 
-  // Mevcut kullanıcıyı getir
-  getCurrentUser: async (): Promise<User> => {
-    const response = await axiosInstance.get<User>('/auth/me');
-    return response.data;
-  },
-
   // Çıkış yap
   logout: async (): Promise<void> => {
     await axiosInstance.post('/auth/logout');

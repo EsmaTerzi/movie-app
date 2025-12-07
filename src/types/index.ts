@@ -34,7 +34,7 @@ export interface Movie {
   title: string;
   overview: string;
   releaseYear: string;
-  genre: string[];
+  genresIds: number[];
   director: string;
   duration: number; // dakika cinsinden
   posterUrl: string;
@@ -43,7 +43,6 @@ export interface Movie {
   createdAt: string;
   updatedAt?: string;
 }
-
 export interface CreateMovieData {
   title: string;
   description: string;
@@ -66,7 +65,7 @@ export interface Review {
   updatedAt: string;
 }
 
-export interface Genre{
+export interface Genre {
   id: string;
   name: string;
 }
@@ -94,8 +93,8 @@ export interface MovieFilters {
   director?: string;
   minRating?: number;
   search?: string;
-  sortBy?: 'releaseDate' | 'rating' | 'title';
-  sortOrder?: 'asc' | 'desc';
+  sortBy?: "releaseDate" | "rating" | "title";
+  sortOrder?: "asc" | "desc";
 }
 
 export interface PaginationParams {
@@ -123,4 +122,12 @@ export interface ApiResponse<T = any> {
   data?: T;
   message?: string;
   error?: ApiError;
+}
+
+export interface StatusResponse {
+  totalMovies: number;
+  totalGenres: number;
+  totalReviews: number;
+  totalWatchlists: number;
+  totalUsers: number;
 }

@@ -26,21 +26,4 @@ export const reviewService = {
     return response.data;
   },
 
-  // Yorumu sil
-  deleteReview: async (id: string): Promise<void> => {
-    await axiosInstance.delete(`/reviews/${id}`);
-  },
-
-  // Kullanıcının belirli bir film için yorumunu kontrol et
-  checkUserReview: async (movieId: string): Promise<Review | null> => {
-    try {
-      const response = await axiosInstance.get<Review>(`/movies/${movieId}/my-review`);
-      return response.data;
-    } catch (error: any) {
-      if (error.response?.status === 404) {
-        return null;
-      }
-      throw error;
-    }
-  },
 };

@@ -1,7 +1,7 @@
 .dashboardLayout {
   display: flex;
-  min-height: calc(100vh - 70px);
-  background: #f3f4f6;
+  width: 100%;
+  height: 100vh;
 }
 
 .sidebar {
@@ -9,8 +9,12 @@
   background: white;
   border-right: 1px solid #e5e7eb;
   position: fixed;
-  height: calc(100vh - 70px);
+  top: 0;
+  left: 0;
+  height: 100vh;
   overflow-y: auto;
+  z-index: 50;
+  padding-top: 70px;
 }
 
 .sidebarHeader {
@@ -58,9 +62,6 @@
 
 .mainContent {
   flex: 1;
-  margin-left: 260px;
-  padding: 2rem;
-  overflow-y: auto;
 }
 
 @media (max-width: 768px) {
