@@ -1,5 +1,5 @@
 import axiosInstance from '@/utils/axios';
-import { Review, CreateReviewData, UpdateReviewData, CreateRatingData } from '@/types';
+import { Review, CreateRatingData } from '@/types';
 
 export const reviewService = {
   // Film için tüm yorumları getir

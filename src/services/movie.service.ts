@@ -1,5 +1,5 @@
 import axiosInstance from '@/utils/axios';
-import { Movie, CreateMovieData, MovieFilters, PaginatedResponse, Genre } from '@/types';
+import { Movie, MovieById, MovieFilters, PaginatedResponse, Genre } from '@/types';
 
 export const movieService = {
   // Tüm filmleri getir
@@ -9,9 +9,8 @@ export const movieService = {
   },
 
   // Tek bir filmi getir
-  getMovieById: async (id: string): Promise<Movie> => {
-    const response = await axiosInstance.get<Movie>(`/movies/public/${id}`);
-    console.log(response.data);
+  getMovieById: async (id: string): Promise<MovieById> => {
+    const response = await axiosInstance.get<MovieById>(`/movies/public/${id}`);
     return response.data;
   },
 

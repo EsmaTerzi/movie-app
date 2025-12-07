@@ -23,7 +23,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
       </div>
       <div className={styles.content}>
         <h3 className={styles.title}>{movie.title}</h3>
-        <p className={styles.genre}>{movie.genre?.map(g => g).join(', ')}</p>
+        <p className={styles.genre}>{movie.genresNames?.join(', ')}</p>
         <div className={styles.footer}>
           <Rating value={movie.averageRating || 0} readonly size="small" showValue />
           <span className={styles.reviews}>

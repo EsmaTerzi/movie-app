@@ -2,10 +2,10 @@ import React from "react";
 import Input from "@/components/common/Input";
 import Textarea from "@/components/common/Textarea";
 import Button from "@/components/common/Button";
-import { Genre } from "@/types";
-import styles from "./page.module.css";
+import { Genre, Movie } from "@/types";
+import styles from "../page.module.css";
 
-interface MovieAddModalProps {
+interface MovieEditModalProps {
   open: boolean;
   onClose: () => void;
   genres: Genre[];
@@ -14,9 +14,10 @@ interface MovieAddModalProps {
   submitting: boolean;
   onSubmit: () => void;
   handleGenreToggle: (genreId: number) => void;
+  selectedMovie: Movie | null;
 }
 
-const MovieAddModal: React.FC<MovieAddModalProps> = ({
+const MovieEditModal: React.FC<MovieEditModalProps> = ({
   open,
   onClose,
   genres,
@@ -25,13 +26,14 @@ const MovieAddModal: React.FC<MovieAddModalProps> = ({
   submitting,
   onSubmit,
   handleGenreToggle,
+  selectedMovie,
 }) => {
-  if (!open) return null;
+  if (!open || !selectedMovie) return null;
   return (
     <div className={styles.modalOverlay} onClick={onClose}>
       <div className={styles.modalLarge} onClick={(e) => e.stopPropagation()}>
         <div className={styles.modalHeader}>
-          <h2>Yeni Film Ekle</h2>
+          <h2>Film Düzenle</h2>
           <button className={styles.closeBtn} onClick={onClose}>
             ✕
           </button>
@@ -40,7 +42,7 @@ const MovieAddModal: React.FC<MovieAddModalProps> = ({
           <div className={styles.formGroup}>
             <Input
               label="Film Adı *"
-              value={formData.title}
+              value={formData.title ?? ""}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
               placeholder="Örn: The Shawshank Redemption"
               fullWidth
@@ -50,7 +52,7 @@ const MovieAddModal: React.FC<MovieAddModalProps> = ({
           <div className={styles.formGroup}>
             <Textarea
               label="Film Açıklaması *"
-              value={formData.overview}
+              value={formData.overview ?? ""}
               onChange={(e) => setFormData({ ...formData, overview: e.target.value })}
               placeholder="Film hakkında kısa bir açıklama..."
               rows={4}
@@ -62,7 +64,7 @@ const MovieAddModal: React.FC<MovieAddModalProps> = ({
             <div className={styles.formGroup}>
               <Input
                 label="Yönetmen *"
-                value={formData.director}
+                value={formData.director ?? ""}
                 onChange={(e) => setFormData({ ...formData, director: e.target.value })}
                 placeholder="Örn: Frank Darabont"
                 fullWidth
@@ -73,7 +75,7 @@ const MovieAddModal: React.FC<MovieAddModalProps> = ({
               <Input
                 label="Yayın Yılı *"
                 type="number"
-                value={formData.releaseYear.toString()}
+                value={formData.releaseYear !== undefined && formData.releaseYear !== null ? formData.releaseYear.toString() : ""}
                 onChange={(e) => setFormData({ ...formData, releaseYear: e.target.value })}
                 placeholder="2024"
                 fullWidth
@@ -86,7 +88,7 @@ const MovieAddModal: React.FC<MovieAddModalProps> = ({
               <Input
                 label="Süre (dakika) *"
                 type="number"
-                value={formData.duration.toString()}
+                value={formData.duration !== undefined && formData.duration !== null ? formData.duration.toString() : ""}
                 onChange={(e) => setFormData({ ...formData, duration: parseInt(e.target.value) })}
                 placeholder="120"
                 fullWidth
@@ -96,7 +98,7 @@ const MovieAddModal: React.FC<MovieAddModalProps> = ({
             <div className={styles.formGroup}>
               <Input
                 label="Poster URL *"
-                value={formData.posterUrl}
+                value={formData.posterUrl ?? ""}
                 onChange={(e) => setFormData({ ...formData, posterUrl: e.target.value })}
                 placeholder="https://example.com/poster.jpg"
                 fullWidth
@@ -111,7 +113,7 @@ const MovieAddModal: React.FC<MovieAddModalProps> = ({
                 <label key={genre.id} className={styles.genreCheckbox}>
                   <input
                     type="checkbox"
-                    checked={formData.genresIds.includes(parseInt(genre.id))}
+                    checked={Array.isArray(formData.genresIds) && formData.genresIds.includes(parseInt(genre.id))}
                     onChange={() => handleGenreToggle(parseInt(genre.id))}
                   />
                   <span>{genre.name}</span>
@@ -125,7 +127,7 @@ const MovieAddModal: React.FC<MovieAddModalProps> = ({
             İptal
           </Button>
           <Button onClick={onSubmit} loading={submitting}>
-            Kaydet
+            Güncelle
           </Button>
         </div>
       </div>
@@ -133,4 +135,4 @@ const MovieAddModal: React.FC<MovieAddModalProps> = ({
   );
 };
 
-export default MovieAddModal;
+export default MovieEditModal;

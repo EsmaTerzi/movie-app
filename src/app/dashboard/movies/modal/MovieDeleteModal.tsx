@@ -1,7 +1,7 @@
 import React from "react";
 import Button from "@/components/common/Button";
 import { Movie } from "@/types";
-import styles from "./page.module.css";
+import styles from "../page.module.css";
 
 interface MovieDeleteModalProps {
   open: boolean;

@@ -8,7 +8,7 @@ import { movieService } from "@/services/movie.service";
 import { reviewService } from "@/services/review.service";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNotification } from "@/contexts/NotificationContext";
-import { Movie, Review } from "@/types";
+import { MovieById, Review } from "@/types";
 import Rating from "@/components/common/Rating/Rating";
 import Button from "@/components/common/Button/Button";
 import Textarea from "@/components/common/Textarea/Textarea";
@@ -18,14 +18,13 @@ export default function MovieDetailPage() {
   const params = useParams();
   const { isAuthenticated  } = useAuth();
   const { warning, success } = useNotification();
-  const [movie, setMovie] = useState<Movie | null>(null);
+  const [movie, setMovie] = useState<MovieById | null>(null);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
   const [userReview, setUserReview] = useState<Review | null>(null);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const [moviesGenres, setMoviesGenres] = useState<string>("");
 
   useEffect(() => {
     if (params.id) {
@@ -77,12 +76,10 @@ export default function MovieDetailPage() {
           : "Değerlendirmeniz kaydedildi!"
       );
 
-      // İnputları temizle
       setRating(0);
       setComment("");
       setUserReview(null);
 
-      // Verileri yeniden yükle
       fetchMovieData();
     } catch (error) {
       console.error("Yorum gönderilirken hata:", error);
@@ -114,7 +111,7 @@ export default function MovieDetailPage() {
         <div className={styles.movieInfo}>
           <h1 className={styles.title}>{movie.title}</h1>
           <div className={styles.meta}>
-            <span>{moviesGenres}</span>
+            <span>{movie.genresNames?.map(name => name).join(", ")}</span>
             <span>•</span>
             <span>{movie.releaseYear}</span>
             <span>•</span>

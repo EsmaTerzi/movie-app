@@ -1,9 +1,10 @@
-// User Types
+import { UserRole } from "./enum";
+
 export interface User {
   id: number;
   username: string;
   email: string;
-  role: string;
+  role: UserRole;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -23,7 +24,7 @@ export interface AuthResponse {
   id: number;
   username: string;
   email: string;
-  role: string;
+  role: UserRole;
   token: string;
   type: string;
 }
@@ -34,7 +35,7 @@ export interface Movie {
   title: string;
   overview: string;
   releaseYear: string;
-  genresIds: number[];
+  genresNames: string[];
   director: string;
   duration: number; // dakika cinsinden
   posterUrl: string;
@@ -42,6 +43,17 @@ export interface Movie {
   totalReviews?: number;
   createdAt: string;
   updatedAt?: string;
+}
+export interface MovieById extends Partial<Movie> {
+  title: string;
+  overview: string;
+  releaseYear: string;
+  genresIds: number[];
+  director: string;
+  duration: number;
+  averageRating?: number;
+  genresNames?: string[];
+  
 }
 export interface CreateMovieData {
   title: string;
@@ -69,7 +81,6 @@ export interface Genre {
   id: string;
   name: string;
 }
-
 export interface CreateReviewData {
   movieId: string;
   rating: number;

@@ -5,10 +5,10 @@ import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { FaFilm, FaUser, FaSignOutAlt } from 'react-icons/fa';
 import styles from './Header.module.css';
+import { UserRole } from '@/types/enum';
 
 const Header: React.FC = () => {
   const { user, logout, isAuthenticated } = useAuth();
-
   return (
     <header className={styles.header}>
       <div className={styles.container}>
@@ -24,7 +24,7 @@ const Header: React.FC = () => {
 
           {isAuthenticated ? (
             <>
-              {user?.role === 'ADMIN' && (
+              {user?.role === UserRole.ROLE_ADMIN && (
                 <Link href="/dashboard" className={styles.navLink}>
                   Admin Paneli
                 </Link>

@@ -1,4 +1,4 @@
-import { Movie, StatusResponse } from "@/types";
+import { Genre, Movie, StatusResponse, User } from "@/types";
 import axiosInstance from "@/utils/axios";
 
 export const adminService = {
@@ -25,6 +25,14 @@ export const adminService = {
   },
   deleteMovie: async (id: string): Promise<void> => {
     await axiosInstance.delete(`/movies/${id}`);
+  },
+  getAllUsers: async () : Promise<User[]> => {
+    const response = await axiosInstance.get<User[]>('/users');
+    return response.data;
+  },  
+  getAllGenres: async (): Promise<Genre[]> => {
+    const response = await axiosInstance.get<Genre[]>('/genres/public');
+    return response.data;
   },
   
 };
