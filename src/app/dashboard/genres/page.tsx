@@ -30,7 +30,7 @@ export default function DashboardGenresPage() {
     { key: 'id', header: 'ID', width: '80px' },
     { key: 'name', header: 'Tür Adı', width: '250px' },
   ];
-
+  console.log(genres);
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Türler</h1>
