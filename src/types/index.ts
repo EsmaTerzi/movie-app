@@ -9,6 +9,10 @@ export interface User {
   updatedAt?: string;
 }
 
+export interface UpdateUserData{
+  username?: string;
+  email?: string;
+}
 export interface RegisterData {
   username: string;
   email: string;

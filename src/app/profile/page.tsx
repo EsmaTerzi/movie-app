@@ -8,6 +8,7 @@ import ProtectedRoute from '@/components/common/ProtectedRoute';
 import Input from '@/components/common/Input';
 import Button from '@/components/common/Button';
 import { useNotification } from '@/contexts/NotificationContext';
+import { useAuth } from '@/contexts/AuthContext';
 
 function ProfilePage() {
   const [profile, setProfile] = useState<User | null>(null);
@@ -15,7 +16,8 @@ function ProfilePage() {
   const [showModal, setShowModal] = useState(false);
   const [editField, setEditField] = useState<{ key: string; label: string; value: string } | null>(null);
   const [submitting, setSubmitting] = useState(false);
-  const { success, error } = useNotification();
+  const { success, error, warning } = useNotification();
+  const { logout } = useAuth();
 
   useEffect(() => {
     fetchProfile();
@@ -47,11 +49,23 @@ function ProfilePage() {
     if (!editField) return;
     setSubmitting(true);
     try {
-      // API call to update profile would go here
-      // await authService.updateProfile({ [editField.key]: editField.value });
-      success(`${editField.label} başarıyla güncellendi!`);
-      await fetchProfile();
-      handleCloseModal();
+      await authService.updateProfile({ [editField.key]: editField.value });
+      
+      if (editField.key === 'username') {
+        success(`${editField.label} başarıyla güncellendi!`);
+        handleCloseModal();
+        
+        setTimeout(() => {
+          warning('Kullanıcı adınız değiştirildi. Güvenlik nedeniyle tekrar giriş yapmalısınız.');
+          setTimeout(() => {
+            logout();
+          }, 2000);
+        }, 1000);
+      } else {
+        success(`${editField.label} başarıyla güncellendi!`);
+        await fetchProfile();
+        handleCloseModal();
+      }
     } catch (err) {
       error('Güncelleme sırasında bir hata oluştu.');
     } finally {

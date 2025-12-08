@@ -1,5 +1,5 @@
 import axiosInstance from '@/utils/axios';
-import { LoginData, RegisterData, AuthResponse, User } from '@/types';
+import { LoginData, RegisterData, AuthResponse, User, UpdateUserData } from '@/types';
 
 export const authService = {
   // Kullanıcı girişi
@@ -21,6 +21,11 @@ export const authService = {
   // Kullanıcı profili
   profile: async (): Promise<User> => {
     const response = await axiosInstance.get<User>('/users/profile');
+    return response.data;
+  },
+  // Profil güncelleme
+  updateProfile: async (data: UpdateUserData): Promise<User> => {
+    const response = await axiosInstance.patch<User>('/users/profile', data);
     return response.data;
   }
 };
