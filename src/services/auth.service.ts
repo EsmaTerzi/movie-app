@@ -18,4 +18,9 @@ export const authService = {
   logout: async (): Promise<void> => {
     await axiosInstance.post('/auth/logout');
   },
+  // Kullanıcı profili
+  profile: async (): Promise<User> => {
+    const response = await axiosInstance.get<User>('/users/profile');
+    return response.data;
+  }
 };

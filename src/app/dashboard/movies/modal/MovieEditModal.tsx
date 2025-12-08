@@ -29,6 +29,7 @@ const MovieEditModal: React.FC<MovieEditModalProps> = ({
   selectedMovie,
 }) => {
   if (!open || !selectedMovie) return null;
+  console.log(formData,'formData in edit modal');
   return (
     <div className={styles.modalOverlay} onClick={onClose}>
       <div className={styles.modalLarge} onClick={(e) => e.stopPropagation()}>
@@ -113,7 +114,7 @@ const MovieEditModal: React.FC<MovieEditModalProps> = ({
                 <label key={genre.id} className={styles.genreCheckbox}>
                   <input
                     type="checkbox"
-                    checked={Array.isArray(formData.genresIds) && formData.genresIds.includes(parseInt(genre.id))}
+                    checked={Array.isArray(formData.genreIds) && formData.genreIds.includes(parseInt(genre.id))}
                     onChange={() => handleGenreToggle(parseInt(genre.id))}
                   />
                   <span>{genre.name}</span>

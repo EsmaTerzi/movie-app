@@ -36,6 +36,7 @@ export interface Movie {
   overview: string;
   releaseYear: string;
   genresNames: string[];
+  genreIds?: number[];
   director: string;
   duration: number; // dakika cinsinden
   posterUrl: string;
@@ -43,6 +44,18 @@ export interface Movie {
   totalReviews?: number;
   createdAt: string;
   updatedAt?: string;
+}
+
+export interface UpdateMovieData {
+  id: string;
+  title?: string;
+  overview?: string;
+  releaseYear?: string;
+  genresIds?: number[];
+  director?: string;
+  duration?: number;
+  posterUrl?: string;
+  
 }
 export interface MovieById extends Partial<Movie> {
   title: string;
@@ -75,6 +88,14 @@ export interface Review {
   reviewText: string;
   createdAt: string;
   updatedAt: string;
+}
+export interface ReviewAdmin {
+  id: string;
+  movie: {
+    title: string;
+  }
+  rating: number;
+  reviewText: string;
 }
 
 export interface Genre {

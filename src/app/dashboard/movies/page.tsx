@@ -31,7 +31,7 @@ export default function DashboardMoviesPage() {
     posterUrl: "",
     director: "",
     duration: 0,
-    genresIds: [],
+    genreIds: [],
   });
 
   useEffect(() => {
@@ -69,11 +69,11 @@ export default function DashboardMoviesPage() {
       posterUrl: "",
       director: "",
       duration: 0,
-      genresIds: [],
+      genreIds: [],
     });
   };
 
-  const handleAddMovie = async () => {
+  const handleAddMovie = async () => { 
     setSubmitting(true);
     try {
       await adminService.createMovie(formData);
@@ -88,18 +88,17 @@ export default function DashboardMoviesPage() {
       setSubmitting(false);
     }
   };
-
   const handleGenreToggle = (genreId: number) => {
-    const currentGenres = formData.genresIds || [];
+    const currentGenres = formData.genreIds || [];
     if (currentGenres.includes(genreId)) {
       setFormData({
         ...formData,
-        genresIds: currentGenres.filter((id) => id !== genreId),
+        genreIds: currentGenres.filter((id) => id !== genreId),
       });
     } else {
       setFormData({
         ...formData,
-        genresIds: [...currentGenres, genreId],
+        genreIds: [...currentGenres, genreId],
       });
     }
   };
@@ -113,7 +112,7 @@ export default function DashboardMoviesPage() {
       posterUrl: movie.posterUrl,
       director: movie.director,
       duration: movie.duration,
-      genresIds: movie.genresIds?.map((g) => parseInt(g as unknown as string)) || [],
+      genreIds: movie.genreIds || [],
     });
     setShowEditModal(true);
   };
@@ -184,7 +183,7 @@ export default function DashboardMoviesPage() {
       ),
     },
   ];
-
+  console.log('selected movie',selectedMovie); 
   return (
     <div className={styles.container}>
       <div className={styles.header}>
