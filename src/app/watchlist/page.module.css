@@ -1,0 +1,371 @@
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+  min-height: calc(100vh - 200px);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  background: linear-gradient(135deg, var(--primary-color) 0%, #667eea 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 500px;
+  font-size: 1.3rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 500px;
+  text-align: center;
+  padding: 4rem;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.03) 0%, rgba(118, 75, 162, 0.03) 100%);
+  border-radius: 24px;
+  border: 2px dashed var(--border-color);
+}
+
+.emptyIcon {
+  font-size: 6rem;
+  margin-bottom: 2rem;
+  opacity: 0.6;
+  filter: grayscale(0.3);
+}
+
+.emptyState h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+}
+
+.emptyState p {
+  color: var(--text-secondary);
+  margin-bottom: 2.5rem;
+  font-size: 1.15rem;
+  max-width: 500px;
+  line-height: 1.6;
+}
+
+.watchlistGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+.watchlistCardWrapper {
+  position: relative;
+}
+
+.watchlistCard {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+  border: 2px solid transparent;
+  border-radius: 16px;
+  padding: 2rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.watchlistCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, var(--primary-color) 0%, #667eea 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 0;
+}
+
+.watchlistCard:hover::before {
+  opacity: 0.1;
+}
+
+.watchlistCard:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 40px rgba(102, 126, 234, 0.2);
+  border-color: var(--primary-color);
+}
+
+.cardIcon {
+  font-size: 3rem;
+  background: linear-gradient(135deg, var(--primary-color) 0%, #667eea 100%);
+  width: 70px;
+  height: 70px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+  transition: transform 0.3s ease;
+}
+
+.watchlistCard:hover .cardIcon {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.cardContent {
+  flex: 1;
+  position: relative;
+  z-index: 1;
+}
+
+.watchlistName {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 0.75rem 0;
+  line-height: 1.3;
+}
+
+.cardMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.metaItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.metaIcon {
+  font-size: 1rem;
+}
+
+.cardArrow {
+  font-size: 1.5rem;
+  color: var(--primary-color);
+  font-weight: bold;
+  position: relative;
+  z-index: 1;
+  transition: transform 0.3s ease;
+}
+
+.watchlistCard:hover .cardArrow {
+  transform: translateX(8px);
+}
+
+.deleteButton {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(220, 38, 38, 0.1);
+  border: 2px solid transparent;
+  color: var(--primary-color);
+  font-size: 1.2rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  z-index: 2;
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+.watchlistCardWrapper:hover .deleteButton {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.deleteButton:hover {
+  background: var(--primary-color);
+  border-color: var(--secondary-color);
+  color: white;
+  transform: scale(1.1) !important;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
+.deleteButton:hover::after {
+  filter: grayscale(0) brightness(2);
+}
+
+/* Modal Styles */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.modal {
+  background: var(--bg-white);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: modalSlideIn 0.3s ease;
+}
+
+.modalSmall {
+  background: var(--bg-white);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.modalHeader h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--text-primary);
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.closeBtn:hover {
+  background: var(--hover-bg);
+  color: var(--text-primary);
+}
+
+.modalBody {
+  padding: 1.5rem;
+}
+
+.deleteWarning {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0;
+  text-align: center;
+}
+
+.modalFooter {
+  display: flex;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-top: 1px solid var(--border-color);
+  justify-content: flex-end;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1.5rem 1rem;
+  }
+
+  .header {
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: stretch;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .watchlistGrid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .watchlistCard {
+    padding: 1.5rem;
+  }
+
+  .cardIcon {
+    width: 60px;
+    height: 60px;
+    font-size: 2.5rem;
+  }
+
+  .watchlistName {
+    font-size: 1.2rem;
+  }
+
+  .emptyState {
+    padding: 2rem;
+    min-height: 400px;
+  }
+
+  .emptyIcon {
+    font-size: 4rem;
+  }
+
+  .emptyState h2 {
+    font-size: 1.5rem;
+  }
+
+  .modal {
+    width: 95%;
+  }
+}

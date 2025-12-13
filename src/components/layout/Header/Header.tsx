@@ -24,6 +24,9 @@ const Header: React.FC = () => {
 
           {isAuthenticated ? (
             <>
+              <Link href="/watchlist" className={styles.navLink}>
+                İzleme Listem
+              </Link>
               {user?.role === UserRole.ROLE_ADMIN && (
                 <Link href="/dashboard" className={styles.navLink}>
                   Admin Paneli

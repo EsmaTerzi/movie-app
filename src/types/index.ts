@@ -9,7 +9,7 @@ export interface User {
   updatedAt?: string;
 }
 
-export interface UpdateUserData{
+export interface UpdateUserData {
   username?: string;
   email?: string;
 }
@@ -59,7 +59,6 @@ export interface UpdateMovieData {
   director?: string;
   duration?: number;
   posterUrl?: string;
-  
 }
 export interface MovieById extends Partial<Movie> {
   title: string;
@@ -70,7 +69,6 @@ export interface MovieById extends Partial<Movie> {
   duration: number;
   averageRating?: number;
   genresNames?: string[];
-  
 }
 export interface CreateMovieData {
   title: string;
@@ -97,7 +95,7 @@ export interface ReviewAdmin {
   id: string;
   movie: {
     title: string;
-  }
+  };
   rating: number;
   reviewText: string;
 }
@@ -110,6 +108,16 @@ export interface CreateReviewData {
   movieId: string;
   rating: number;
   comment: string;
+}
+export interface WatchlistItem {
+  id: string;
+  name: string;
+  createdAt: string;
+  user?: {
+    id: number;
+    username: string;
+    email: string;
+  };
 }
 
 export interface CreateRatingData {
@@ -131,6 +139,12 @@ export interface MovieFilters {
   search?: string;
   sortBy?: "releaseDate" | "rating" | "title";
   sortOrder?: "asc" | "desc";
+}
+
+export interface WatchListMovies {
+  id: string;
+  name: string;
+  movies: Movie[];
 }
 
 export interface PaginationParams {

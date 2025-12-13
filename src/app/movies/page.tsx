@@ -46,17 +46,12 @@ export default function MoviesPage() {
     }
   };
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    fetchMovies();
-  };
-
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Filmler</h1>
 
       <div className={styles.filters}>
-        <form onSubmit={handleSearch} className={styles.searchForm}>
+        <div className={styles.searchWrapper}>
           <input
             type="text"
             placeholder="Film ara..."
@@ -64,10 +59,7 @@ export default function MoviesPage() {
             onChange={(e) => setSearchQuery(e.target.value)}
             className={styles.searchInput}
           />
-          <button type="submit" className={styles.searchButton}>
-            Ara
-          </button>
-        </form>
+        </div>
 
         <div className={styles.filterSelects}>
           <div className={styles.selectWrapper}>

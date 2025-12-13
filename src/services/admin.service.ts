@@ -5,6 +5,7 @@ import {
   StatusResponse,
   UpdateMovieData,
   User,
+  WatchlistItem,
 } from "@/types";
 import axiosInstance from "@/utils/axios";
 
@@ -49,4 +50,8 @@ export const adminService = {
     const response = await axiosInstance.get<ReviewAdmin[]>("/ratings");
     return response.data;
   },
+  getAllWatchLists: async (): Promise<WatchlistItem[]> => {
+    const response = await axiosInstance.get<WatchlistItem[]>("/watchlist/all");
+    return response.data;
+  }
 };

@@ -6,9 +6,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { movieService } from "@/services/movie.service";
 import { reviewService } from "@/services/review.service";
+import { watchlistService } from "@/services/watchlist.service";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNotification } from "@/contexts/NotificationContext";
-import { MovieById, Review } from "@/types";
+import { MovieById, Review, WatchlistItem } from "@/types";
 import Rating from "@/components/common/Rating/Rating";
 import Button from "@/components/common/Button/Button";
 import Textarea from "@/components/common/Textarea/Textarea";
@@ -25,6 +26,9 @@ export default function MovieDetailPage() {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [showWatchlistModal, setShowWatchlistModal] = useState(false);
+  const [watchlists, setWatchlists] = useState<WatchlistItem[]>([]);
+  const [loadingWatchlists, setLoadingWatchlists] = useState(false);
 
   useEffect(() => {
     if (params.id) {
@@ -46,6 +50,34 @@ export default function MovieDetailPage() {
       console.error("Film verileri yüklenirken hata:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchWatchlists = async () => {
+    if (!isAuthenticated) {
+      warning("İzleme listesine eklemek için giriş yapmalısınız");
+      return;
+    }
+
+    setLoadingWatchlists(true);
+    try {
+      const data = await watchlistService.getUserWatchlists();
+      setWatchlists(data);
+      setShowWatchlistModal(true);
+    } catch (error) {
+      warning("İzleme listeleri yüklenirken hata oluştu");
+    } finally {
+      setLoadingWatchlists(false);
+    }
+  };
+
+  const handleAddToWatchlist = async (watchlistId: string) => {
+    try {
+      await watchlistService.addMovieToWatchlist(watchlistId, params.id as string);
+      success("Film izleme listesine eklendi!");
+      setShowWatchlistModal(false);
+    } catch (error) {
+      warning("Film eklenirken hata oluştu");
     }
   };
 
@@ -130,6 +162,11 @@ export default function MovieDetailPage() {
           </div>
           <p className={styles.director}>Yönetmen: {movie.director}</p>
           <p className={styles.description}>{movie.overview}</p>
+          <div className={styles.actionButtons}>
+            <Button onClick={fetchWatchlists} loading={loadingWatchlists}>
+              + İzleme Listesine Ekle
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -192,6 +229,44 @@ export default function MovieDetailPage() {
           )}
         </div>
       </div>
+
+      {/* Watchlist Modal */}
+      {showWatchlistModal && (
+        <div className={styles.modalOverlay} onClick={() => setShowWatchlistModal(false)}>
+          <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.modalHeader}>
+              <h2>İzleme Listesi Seçin</h2>
+              <button className={styles.closeBtn} onClick={() => setShowWatchlistModal(false)}>
+                ✕
+              </button>
+            </div>
+            <div className={styles.modalBody}>
+              {watchlists.length === 0 ? (
+                <div className={styles.emptyWatchlist}>
+                  <p>Henüz izleme listeniz yok.</p>
+                  <Link href="/watchlist" className={styles.createLink}>
+                    Yeni Liste Oluştur
+                  </Link>
+                </div>
+              ) : (
+                <div className={styles.watchlistList}>
+                  {watchlists.map((watchlist) => (
+                    <div
+                      key={watchlist.id}
+                      className={styles.watchlistItem}
+                      onClick={() => handleAddToWatchlist(watchlist.id)}
+                    >
+                      <span className={styles.watchlistIcon}>📋</span>
+                      <span className={styles.watchlistName}>{watchlist.name}</span>
+                      <span className={styles.addIcon}>+</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

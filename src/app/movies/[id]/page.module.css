@@ -64,6 +64,12 @@
   color: #4b5563;
 }
 
+.actionButtons {
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 1rem;
+}
+
 .reviewsSection {
   margin-top: 4rem;
 }
@@ -167,6 +173,143 @@
   padding: 4rem;
   font-size: 1.25rem;
   color: #6b7280;
+}
+
+/* Watchlist Modal Styles */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.modal {
+  background: white;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.modalHeader h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #111827;
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.closeBtn:hover {
+  background: #f3f4f6;
+  color: #111827;
+}
+
+.modalBody {
+  padding: 1.5rem;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.emptyWatchlist {
+  text-align: center;
+  padding: 2rem;
+}
+
+.emptyWatchlist p {
+  color: #6b7280;
+  margin-bottom: 1rem;
+}
+
+.createLink {
+  color: #764ba2;
+  font-weight: 600;
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+
+.createLink:hover {
+  color: #667eea;
+}
+
+.watchlistList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.watchlistItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+  border: 2px solid transparent;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.watchlistItem:hover {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  border-color: #764ba2;
+  transform: translateX(4px);
+}
+
+.watchlistIcon {
+  font-size: 1.5rem;
+}
+
+.watchlistName {
+  flex: 1;
+  font-weight: 600;
+  color: #111827;
+}
+
+.addIcon {
+  font-size: 1.5rem;
+  color: #764ba2;
+  font-weight: bold;
 }
 
 @media (max-width: 768px) {

@@ -19,9 +19,8 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.searchForm {
+.searchWrapper {
   display: flex;
-  gap: 0.75rem;
   width: 100%;
 }
 
@@ -38,24 +37,6 @@
 .searchInput:focus {
   border-color: #dc2626;
   box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
-}
-
-.searchButton {
-  padding: 0.875rem 2rem;
-  background: #dc2626;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-}
-
-.searchButton:hover {
-  background: #b91c1c;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
 }
 
 .filterSelects {
@@ -201,6 +182,7 @@
 
   .applyButton,
   .clearButton {
-    width: 100%;
+  .filters {
+    padding: 1.5rem;
   }
-}
+  }}
