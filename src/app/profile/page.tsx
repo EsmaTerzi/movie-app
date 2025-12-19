@@ -45,11 +45,23 @@ function ProfilePage() {
     setEditField(null);
   };
 
+  const isValidEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
   const handleSave = async () => {
     if (!editField) return;
+    
+    // Email validasyonu
+    if (editField.key === 'email' && !isValidEmail(editField.value.trim())) {
+      error('Lütfen geçerli bir e-posta adresi girin.');
+      return;
+    }
+    
     setSubmitting(true);
     try {
-      await authService.updateProfile({ [editField.key]: editField.value });
+      await authService.updateProfile({ [editField.key]: editField.value.trim() });
       
       if (editField.key === 'username') {
         success(`${editField.label} başarıyla güncellendi!`);
@@ -67,7 +79,7 @@ function ProfilePage() {
         handleCloseModal();
       }
     } catch (err) {
-      error('Güncelleme sırasında bir hata oluştu.');
+      error('Girilen bilgiler sistemde zaten kayıtlıdır. Lütfen farklı bilgiler deneyiniz.');
     } finally {
       setSubmitting(false);
     }

@@ -103,17 +103,45 @@ export default function DashboardMoviesPage() {
     }
   };
 
-  const handleEdit = (movie: Movie) => {
+  const handleEdit = async (movie: Movie) => {
+   
     setSelectedMovie(movie);
-    setFormData({
-      title: movie.title,
-      overview: movie.overview,
-      releaseYear: movie.releaseYear,
-      posterUrl: movie.posterUrl,
-      director: movie.director,
-      duration: movie.duration,
-      genreIds: movie.genreIds || [],
-    });
+    try {
+      // Film detaylarını API'den al (genreIds dahil)
+      const movieDetails = await movieService.getMovieById(movie.id);
+      
+      // API'den gelen genreIds veya genresIds'i kontrol et
+      let genreIds = [];
+      if (movieDetails.genresIds) {
+        genreIds = movieDetails.genresIds;
+      } else if (movieDetails.genreIds) {
+        genreIds = movieDetails.genreIds;
+      } else if (movie.genreIds) {
+        genreIds = movie.genreIds;
+      }
+      
+      const newFormData = {
+        title: movie.title,
+        overview: movie.overview,
+        releaseYear: movie.releaseYear,
+        posterUrl: movie.posterUrl,
+        director: movie.director,
+        duration: movie.duration,
+        genreIds: genreIds,
+      };
+      setFormData(newFormData);
+    } catch (error) {
+      console.error('Film detayları alınırken hata:', error);
+      setFormData({
+        title: movie.title,
+        overview: movie.overview,
+        releaseYear: movie.releaseYear,
+        posterUrl: movie.posterUrl,
+        director: movie.director,
+        duration: movie.duration,
+        genreIds: movie.genreIds || [],
+      });
+    }
     setShowEditModal(true);
   };
 
@@ -183,7 +211,6 @@ export default function DashboardMoviesPage() {
       ),
     },
   ];
-  console.log('selected movie',selectedMovie); 
   return (
     <div className={styles.container}>
       <div className={styles.header}>

@@ -26,6 +26,18 @@ const MovieAddModal: React.FC<MovieAddModalProps> = ({
   onSubmit,
   handleGenreToggle,
 }) => {
+  const isFormValid = () => {
+    return (
+      formData.title?.trim() &&
+      formData.overview?.trim() &&
+      formData.director?.trim() &&
+      formData.releaseYear &&
+      formData.duration > 0 &&
+      formData.posterUrl?.trim() &&
+      formData.genreIds?.length > 0
+    );
+  };
+
   if (!open) return null;
   return (
     <div className={styles.modalOverlay} onClick={onClose}>
@@ -111,7 +123,7 @@ const MovieAddModal: React.FC<MovieAddModalProps> = ({
                 <label key={genre.id} className={styles.genreCheckbox}>
                   <input
                     type="checkbox"
-                    checked={formData.genresIds.includes(parseInt(genre.id))}
+                    checked={formData.genreIds?.includes(parseInt(genre.id)) || false}
                     onChange={() => handleGenreToggle(parseInt(genre.id))}
                   />
                   <span>{genre.name}</span>
@@ -124,7 +136,7 @@ const MovieAddModal: React.FC<MovieAddModalProps> = ({
           <Button variant="secondary" onClick={onClose} disabled={submitting}>
             İptal
           </Button>
-          <Button onClick={onSubmit} loading={submitting}>
+          <Button onClick={onSubmit} loading={submitting} disabled={!isFormValid() || submitting}>
             Kaydet
           </Button>
         </div>

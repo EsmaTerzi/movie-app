@@ -28,8 +28,19 @@ const MovieEditModal: React.FC<MovieEditModalProps> = ({
   handleGenreToggle,
   selectedMovie,
 }) => {
+  const isFormValid = () => {
+    return (
+      formData.title?.trim() &&
+      formData.overview?.trim() &&
+      formData.director?.trim() &&
+      formData.releaseYear &&
+      formData.duration > 0 &&
+      formData.posterUrl?.trim() &&
+      formData.genreIds?.length > 0
+    );
+  };
+
   if (!open || !selectedMovie) return null;
-  console.log(formData,'formData in edit modal');
   return (
     <div className={styles.modalOverlay} onClick={onClose}>
       <div className={styles.modalLarge} onClick={(e) => e.stopPropagation()}>
@@ -115,7 +126,9 @@ const MovieEditModal: React.FC<MovieEditModalProps> = ({
                   <input
                     type="checkbox"
                     checked={Array.isArray(formData.genreIds) && formData.genreIds.includes(parseInt(genre.id))}
-                    onChange={() => handleGenreToggle(parseInt(genre.id))}
+                    onChange={() => {
+                      handleGenreToggle(parseInt(genre.id));
+                    }}
                   />
                   <span>{genre.name}</span>
                 </label>
@@ -127,7 +140,7 @@ const MovieEditModal: React.FC<MovieEditModalProps> = ({
           <Button variant="secondary" onClick={onClose} disabled={submitting}>
             İptal
           </Button>
-          <Button onClick={onSubmit} loading={submitting}>
+          <Button onClick={onSubmit} loading={submitting} disabled={!isFormValid() || submitting}>
             Güncelle
           </Button>
         </div>

@@ -23,7 +23,7 @@ export default function DashboardLayout({
   const pathname = usePathname();
 
   return (
-    <div className={styles.dashboardLayout}>
+    <div className={`${styles.dashboardLayout} dashboardLayout`}>
       <aside className={styles.sidebar}>
         <div className={styles.sidebarHeader}>
           <h2>Admin Paneli</h2>

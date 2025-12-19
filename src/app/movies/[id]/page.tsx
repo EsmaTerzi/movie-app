@@ -29,6 +29,27 @@ export default function MovieDetailPage() {
   const [showWatchlistModal, setShowWatchlistModal] = useState(false);
   const [watchlists, setWatchlists] = useState<WatchlistItem[]>([]);
   const [loadingWatchlists, setLoadingWatchlists] = useState(false);
+  const [imageSrc, setImageSrc] = useState<string>('');
+
+  const getValidImageSrc = (url: string | undefined) => {
+    if (!url || url.trim().length === 0) {
+      return '/movie-placeholder.svg';
+    }
+    // Sadece http/https ile başlayan URL'leri kabul et
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+      return url;
+    }
+    // Eğer / ile başlıyorsa local path olarak kabul et
+    if (url.startsWith('/')) {
+      return url;
+    }
+    // Diğer durumlar için placeholder
+    return '/movie-placeholder.svg';
+  };
+
+  const handleImageError = () => {
+    setImageSrc('/movie-placeholder.svg');
+  };
 
   useEffect(() => {
     if (params.id) {
@@ -41,6 +62,7 @@ export default function MovieDetailPage() {
     try {
       const movieData = await movieService.getMovieById(params.id as string);
       setMovie(movieData);
+      setImageSrc(getValidImageSrc(movieData.posterUrl));
 
       const reviewsData = await reviewService.getMovieReviews(
         params.id as string
@@ -77,7 +99,7 @@ export default function MovieDetailPage() {
       success("Film izleme listesine eklendi!");
       setShowWatchlistModal(false);
     } catch (error) {
-      warning("Film eklenirken hata oluştu");
+      warning("İzleme listesinde bu film zaten mevcut.");
     }
   };
 
@@ -134,10 +156,11 @@ export default function MovieDetailPage() {
       <div className={styles.movieHeader}>
         <div className={styles.posterContainer}>
           <Image
-            src={movie.posterUrl || "/placeholder-movie.jpg"}
+            src={imageSrc}
             alt={movie.title}
             fill
             className={styles.poster}
+            onError={handleImageError}
           />
         </div>
         <div className={styles.movieInfo}>
@@ -157,7 +180,7 @@ export default function MovieDetailPage() {
               showValue
             />
             <span className={styles.reviewCount}>
-              ({movie.totalReviews || 0} değerlendirme)
+              ({reviews.length} değerlendirme)
             </span>
           </div>
           <p className={styles.director}>Yönetmen: {movie.director}</p>

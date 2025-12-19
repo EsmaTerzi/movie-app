@@ -65,3 +65,10 @@ button {
 h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
 }
+
+/* Dashboard layout footer fix */
+.dashboardLayout footer .container {
+  max-width: none !important;
+  margin: 0 !important;
+  padding-left: 260px !important;
+}

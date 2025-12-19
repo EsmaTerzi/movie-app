@@ -91,54 +91,51 @@ function WatchlistDetailPage() {
             </Link>
           </div>
         ) : (
-          <div className={styles.moviesGrid}>
-            {watchlistData.movies.map((movie) => (
-              <div key={movie.id} className={styles.movieCardWrapper}>
-                <Link
-                  href={`/movies/${movie.id}`}
-                  className={styles.movieCard}
-                >
-                  <div className={styles.posterContainer}>
-                    <Image
-                      src={movie.posterUrl || "/placeholder-movie.jpg"}
-                      alt={movie.title}
-                      fill
-                      className={styles.poster}
-                    />
-                  </div>
-                  <div className={styles.movieInfo}>
-                    <h3 className={styles.movieTitle}>{movie.title}</h3>
-                    <div className={styles.movieMeta}>
-                      <span className={styles.year}>{movie.releaseYear}</span>
-                      <span className={styles.duration}>{movie.duration} dk</span>
-                    </div>
-                    <div className={styles.rating}>
-                      <Rating
-                        value={movie.averageRating || 0}
-                        readonly
-                        size="small"
+          <>
+            <div className={styles.moviesGrid}>
+              {watchlistData.movies.map((movie) => (
+                <div key={movie.id} className={styles.movieCardWrapper}>
+                  <Link
+                    href={`/movies/${movie.id}`}
+                    className={styles.movieCard}
+                  >
+                    <div className={styles.posterContainer}>
+                      <Image
+                        src={movie.posterUrl || "/placeholder-movie.jpg"}
+                        alt={movie.title}
+                        fill
+                        className={styles.poster}
                       />
-                      <span className={styles.ratingText}>
-                        {movie.averageRating?.toFixed(1) || "0.0"}
-                      </span>
                     </div>
-                    <p className={styles.overview}>
-                      {movie.overview?.substring(0, 100)}
-                      {movie.overview && movie.overview.length > 100 ? "..." : ""}
-                    </p>
-                  </div>
-                </Link>
-                <button
-                  className={styles.removeBtn}
-                  onClick={(e) => handleRemoveMovie(e, movie.id)}
-                  disabled={removingMovieId === movie.id}
-                  title="Listeden Çıkar"
-                >
-                  {removingMovieId === movie.id ? '⏳' : '✕'}
-                </button>
-              </div>
-            ))}
-          </div>
+                    <div className={styles.movieInfo}>
+                      <h3 className={styles.movieTitle}>{movie.title}</h3>
+                      <div className={styles.movieMeta}>
+                        <span className={styles.year}>{movie.releaseYear}</span>
+                        <span className={styles.duration}>{movie.duration} dk</span>
+                      </div>
+                      <p className={styles.overview}>
+                        {movie.overview?.substring(0, 100)}
+                        {movie.overview && movie.overview.length > 100 ? "..." : ""}
+                      </p>
+                    </div>
+                  </Link>
+                  <button
+                    className={styles.removeBtn}
+                    onClick={(e) => handleRemoveMovie(e, movie.id)}
+                    disabled={removingMovieId === movie.id}
+                    title="Listeden Çıkar"
+                  >
+                    {removingMovieId === movie.id ? '⏳' : '✕'}
+                  </button>
+                </div>
+              ))}
+            </div>
+            <div className={styles.bottomAction}>
+              <Link href="/movies">
+                <Button>Filmlere Göz At</Button>
+              </Link>
+            </div>
+          </>
         )}
       </div>
     </ProtectedRoute>
