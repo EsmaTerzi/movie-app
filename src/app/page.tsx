@@ -42,14 +42,6 @@ export default function HomePage() {
           <Link href="/movies" className={styles.btnPrimary}>
             Filmleri Keşfet
           </Link>
-          {!isAuthenticated && (
-            <Link
-              href={`${process.env.NEXT_PUBLIC_REGISTER_URL}/register`}
-              className={styles.btnSecondary}
-            >
-              Hemen Kayıt Ol
-            </Link>
-          )}
         </div>
       </section>
 
