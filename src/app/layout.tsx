@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { usePathname } from 'next/navigation';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { NotificationProvider } from '@/contexts/NotificationContext';
 import { NotificationContainer } from '@/components/common/Notification';
@@ -13,6 +14,9 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const pathname = usePathname();
+  const isDashboard = pathname?.startsWith('/dashboard');
+
   return (
     <html lang="tr">
       <head>
@@ -27,7 +31,7 @@ export default function RootLayout({
             <div className="app-container">
               <Header />
               <main className="main-content">{children}</main>
-              <Footer />
+              {!isDashboard && <Footer />}
             </div>
           </AuthProvider>
         </NotificationProvider>
